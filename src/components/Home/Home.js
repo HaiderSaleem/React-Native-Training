@@ -20,11 +20,6 @@ import { getStyle } from './style';
 import AddToDo from '../AddToDo/AddToDo';
 
 const Home = (prop) => {
-  const state = {
-    count: 0,
-  };
-
-  const [name, setName] = useState('Haider');
   const [people, setPeople] = useState([
     { name: 'Hey', id: 0 },
     { name: 'Hi', id: 1 },
@@ -32,10 +27,6 @@ const Home = (prop) => {
     { name: 'Hola', id: 3 },
 
   ]);
-
-  const onPress = () => {
-    setName('Ali');
-  };
 
   const onItemPresses = (id) => {
     setPeople((prevPeople) => prevPeople.filter((person) => person.id !== id));
