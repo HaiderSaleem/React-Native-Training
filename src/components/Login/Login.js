@@ -1,20 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  View, TextInput, Text, StyleSheet, Alert, Button,
+  View, Text, StyleSheet, Alert, Button, ImageBackground, Pressable,
 } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
+import PropTypes from 'prop-types';
+import TextInput from 'react-native-material-textinput';
 import { setName, setAge } from '../../Redux/actions';
 
 const styles = StyleSheet.create({
-  textInput: {
-    padding: 10,
+  loginButton: {
     borderWidth: 1,
-    borderBottomColor: '#000',
-    marginBottom: 10,
-    marginTop: 10,
+    borderColor: '#fff',
+    borderRadius: 20,
+    color: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
   },
   input: {
     paddingTop: 40,
@@ -35,13 +39,33 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
   },
-  text: {
-    textAlign: 'center',
+  label: {
+    marginTop: 40,
+    fontSize: 35,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  label1: {
+    fontFamily: 'AlumniSansPinstripe-Regular',
+    marginTop: 30,
+    fontSize: 25,
+    color: '#fff',
+  },
+  label2: {
+    fontSize: 17,
+    color: '#fff',
+  },
+  label3: {
+    fontSize: 15,
+    color: '#fff',
+    textAlign: 'right',
+    marginTop: 20,
+    marginBottom: 25,
   },
 });
 
 const Login = ({ navigation }) => {
-  const { userName, age } = useSelector((state) => state.userReducer);
+  const { userName } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   // const [name, setName] = useState('');
 
@@ -83,12 +107,27 @@ const Login = ({ navigation }) => {
     createChannel();
   }, []);
   return (
-    <View style={styles.input}>
-      <Text style={styles.text}>Async Storage</Text>
-      <TextInput placeholder="Please enter your name" style={styles.textInput} onChangeText={(value) => dispatch(setName(value))} />
-      <Button title="Login" onPress={onPressHandler} />
-    </View>
+    <ImageBackground style={{ width: '100%', height: '100%' }} source={require('../../assets/images/bg.png')}>
+      <View style={styles.input}>
+        <Text style={styles.label}>Login.</Text>
+        <Text style={styles.label1}>WELCOME BACK,</Text>
+        <Text style={styles.label2}>Sign in to continue</Text>
+        <TextInput label="Email" marginTop={70} labelColor="#fff" color="#fff" underlineColor="#fff" activeColor="#fff" onChangeText={(value) => dispatch(setName(value))} />
+        <TextInput label="Password" secureTextEntry labelColor="#fff" color="#fff" underlineColor="#fff" activeColor="#fff" onChangeText={(value) => dispatch(setName(value))} />
+        <Text style={styles.label3}>Forgot Password?</Text>
+        <Pressable style={styles.loginButton} title="Login" onPress={onPressHandler}>
+          <Text style={styles.label2}>Login</Text>
+        </Pressable>
+        <Text style={[styles.label2, { textAlign: 'center', marginTop: 120 }]}>New User? Sign Up</Text>
+      </View>
+    </ImageBackground>
   );
 };
 
+Login.prototypes = {
+  navigation: PropTypes.shape({}).isRequired,
+};
+Login.defaultProps = {
+
+};
 export default Login;
