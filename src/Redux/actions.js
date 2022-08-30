@@ -2,7 +2,7 @@ import axios from 'axios';
 import { RAPID_API_KEY } from '@env';
 
 export const SET_USER_NAME = 'SET_USER_NAME';
-export const SET_USER_AGE = 'SET_USER_AGE';
+export const SET_USER_PASSWORD = 'SET_USER_PASSWORD';
 export const GET_DATA = 'GET_DATA';
 
 export const getAPIData = () => {
@@ -25,7 +25,7 @@ export const getAPIData = () => {
   return async (dispatch) => {
     const response = await axios.request(options);
     if (response != null) {
-      console.log(response.data[0].lat);
+      console.log(response.data);
       dispatch({
         type: GET_DATA,
         payload: response.data,
@@ -40,9 +40,9 @@ export const setName = (userName) => (dispatch) => {
   });
 };
 
-export const setAge = (age) => (dispatch) => {
+export const setPassword = (password) => (dispatch) => {
   dispatch({
-    type: SET_USER_AGE,
-    payload: age,
+    type: SET_USER_PASSWORD,
+    payload: password,
   });
 };

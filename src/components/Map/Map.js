@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
 });
 
 const Map = ({ route }) => {
-  const { data } = route.params;
+  const data = route.params != null ? route.params : {
+    country: 'Pakistan', city: 'Lahore', lat: 31.5204, long: '74.3587',
+  };
 
   return (
     <View style={styles.content}>

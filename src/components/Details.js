@@ -7,7 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
-import { setName, setAge, getAPIData } from '../Redux/actions';
+import { setName, setPassword, getAPIData } from '../Redux/actions';
+import { getStyle } from './Home/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -20,6 +21,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: 'bold',
+    margin: 10,
   },
   city: {
     fontSize: 15,
@@ -27,15 +29,17 @@ const styles = StyleSheet.create({
 });
 
 const Details = ({ navigation }) => {
-  const { userName, age, data } = useSelector((state) => state.userReducer);
+  const { userName, password, data } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
   const getData = () => {
     try {
-      AsyncStorage.getItem('userName').then((value) => {
+      AsyncStorage.getItem('userData').then((value) => {
         if (value != null) {
-          dispatch(setName(value));
-          dispatch(setAge(40));
+          const userData = JSON.parse(value);
+          dispatch(setName(userData.userName));
+          dispatch(setPassword(userData.password));
+          navigation.navigate('Details');
         }
       });
     } catch (error) {
@@ -67,15 +71,15 @@ const Details = ({ navigation }) => {
     return null;
   }
   return (
-    <View>
+    <View style={getStyle.body}>
       <Text style={styles.title}>
         Welcome
         {' '}
         {userName}
         {', '}
-        Age is
+        Password is
         {' '}
-        {age}
+        {password}
       </Text>
 
       <FlatList
@@ -97,7 +101,9 @@ const Details = ({ navigation }) => {
 };
 
 Details.propTypes = {
-  navigation: PropTypes.shape({}).isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 Details.defaultProps = {
 

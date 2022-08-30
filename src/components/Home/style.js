@@ -7,13 +7,11 @@ export const getStyle = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: '#fff',
   },
   body: {
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: '#fff',
     padding: 20,
   },
   button: {
