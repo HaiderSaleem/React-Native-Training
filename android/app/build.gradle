@@ -132,7 +132,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [GOOGLE_MAP_API_KEY: "$System.env.GOOGLE_MAP_API_KEY"]
     }
     splits {
         abi {
@@ -222,5 +221,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 applyNativeModulesAppBuildGradle(project)

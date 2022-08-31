@@ -1,18 +1,14 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import { Provider } from 'react-redux';
 import Store from './src/Redux/store';
-import Home from './src/components/Home/Home';
-import Details from './src/components/Details';
-import Login from './src/components/Login/Login';
+import LoginScreen from './src/components/Login/LoginScreen';
+import MainScreen from './src/components/Main/MainScreen';
 import Map from './src/components/Map/Map';
 
 const Stack = createNativeStackNavigator();
-const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
   return (
@@ -21,19 +17,16 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen
             options={{ headerShown: false }}
-            name="Login"
-            component={Login}
+            name="LoginScreen"
+            component={LoginScreen}
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="Home"
-            component={Home}
+            name="MainScreen"
+            component={MainScreen}
           />
-          <Tab.Screen
-            name="Details"
-            component={Details}
-          />
-          <Tab.Screen
+          <Stack.Screen
+            options={{ headerShown: false }}
             name="Map"
             component={Map}
           />
