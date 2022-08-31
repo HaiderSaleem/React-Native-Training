@@ -51,8 +51,8 @@ const Map = ({ route }) => {
             {
               latitude: parseInt(data.lat, 10),
               longitude: parseInt(data.long, 10),
-              latitudeDelta: 1,
-              longitudeDelta: 1,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
             }
           }
         />

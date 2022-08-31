@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { FAB } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
+import Proptypes from 'prop-types';
 
 const styles = StyleSheet.create({
   tab1: {
@@ -30,9 +31,10 @@ function CustomTabBar({ state, descriptors, navigation }) {
   const NotFocusedGradient = ['#ffffff', '#ffffff'];
 
   return (
-    <View style={{
-      flexDirection: 'row', backgroundColor: '#fff', height: 50, borderRadius: 100, justifyContent: 'center', alignItems: 'center',
-    }}
+    <View
+      style={{
+        flexDirection: 'row', backgroundColor: '#fff', height: 50, borderRadius: 100, justifyContent: 'center', alignItems: 'center',
+      }}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -78,6 +80,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
               <LinearGradient
                 colors={isFocused ? FocusedGradient : NotFocusedGradient}
                 style={getStyle()}
+                key={index.toString()}
               >
                 <TouchableOpacity
                   accessibilityRole="button"
@@ -98,9 +101,11 @@ function CustomTabBar({ state, descriptors, navigation }) {
               </LinearGradient>
             )
             : (
-              <View style={{
-                position: 'absolute', alignSelf: 'center', backgroundColor: '#f8f4f4', width: 70, height: 70, borderRadius: 35, bottom: 25, zIndex: 10,
-              }}
+              <View
+                key={index.toString()}
+                style={{
+                  position: 'absolute', alignSelf: 'center', backgroundColor: '#f8f4f4', width: 70, height: 70, borderRadius: 35, bottom: 25, zIndex: 10,
+                }}
               >
 
                 <FAB
@@ -123,5 +128,19 @@ function CustomTabBar({ state, descriptors, navigation }) {
     </View>
   );
 }
+
+CustomTabBar.prototype = {
+  state: Proptypes.shape({
+    index: Proptypes.number.isRequired,
+    routes: Proptypes.number.isRequired,
+  }).isRequired,
+  descriptors: Proptypes.shape({}).isRequired,
+  navigation: Proptypes.shape({
+    navigate: Proptypes.func.isRequired,
+    emit: Proptypes.func.isRequired,
+  }).isRequired,
+};
+CustomTabBar.defaultProps = {
+};
 
 export default CustomTabBar;

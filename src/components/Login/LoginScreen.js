@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
 
       const jsonData = JSON.stringify({ userName, password });
       await AsyncStorage.setItem('userData', jsonData);
-      navigation.navigate('Details');
+      navigation.navigate('MainScreen');
     }
   };
 
@@ -129,9 +129,6 @@ const LoginScreen = ({ navigation }) => {
 LoginScreen.prototypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};
-LoginScreen.defaultProps = {
-
+  }),
 };
 export default LoginScreen;

@@ -46,3 +46,10 @@ export const setPassword = (password) => (dispatch) => {
     payload: password,
   });
 };
+
+export const setData = (data) => (dispatch) => {
+  dispatch({
+    type: SET_USER_PASSWORD,
+    payload: data,
+  });
+};

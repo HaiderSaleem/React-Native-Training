@@ -4,12 +4,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
 import { View } from 'react-native';
 import Home from '../Home/Home';
-import Details from '../Details';
-import Map from '../Map/Map';
+import Details from '../Details/Details';
 import CustomTabBar from '../Utils/CustomTabBar';
 
 const Tab = createBottomTabNavigator();
-
+export function MapScreen() {
+  return (
+    <View />
+  );
+}
 export default function MainScreen() {
   const { colors } = useTheme();
 
@@ -51,8 +54,8 @@ export default function MainScreen() {
         />
         <Tab.Screen
           options={{ headerShown: false }}
-          name="Map"
-          component={Map}
+          name="MapScreen"
+          component={MapScreen}
         />
       </Tab.Navigator>
     </View>

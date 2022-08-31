@@ -16,6 +16,8 @@ target 'FirstApp' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
   target 'FirstAppTests' do
     inherit! :complete
     # Pods for testing
