@@ -96,7 +96,7 @@ const LoginScreen = ({ navigation }) => {
           const data = JSON.parse(value);
           dispatch(setName(data.userName));
           dispatch(setPassword(data.password));
-          navigation.navigate('MainScreen');
+          navigation.navigate('DrawerNavigation');
         }
       });
     } catch (error) {

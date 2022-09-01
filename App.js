@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import Store from './src/Redux/store';
 import LoginScreen from './src/components/Login/LoginScreen';
-import MainScreen from './src/components/Main/MainScreen';
+import DrawerNavigation from './src/components/Main/DrawerNavigation';
 import Map from './src/components/Map/Map';
 
 const Stack = createNativeStackNavigator();
@@ -22,8 +22,8 @@ export default function App() {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="MainScreen"
-            component={MainScreen}
+            name="DrawerNavigation"
+            component={DrawerNavigation}
           />
           <Stack.Screen
             options={{ headerShown: false }}

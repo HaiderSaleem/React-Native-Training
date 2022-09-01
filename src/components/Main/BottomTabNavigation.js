@@ -13,7 +13,7 @@ export function MapScreen() {
     <View />
   );
 }
-export default function MainScreen() {
+export default function BottomTabNavigation() {
   const { colors } = useTheme();
 
   return (

@@ -150,8 +150,8 @@ const Details = ({ navigation }) => {
   );
 };
 
-Details.defaultProps = {
-
-};
+Details.prototype = ({
+  navigation: PropTypes.shape({}),
+});
 
 export default Details;
