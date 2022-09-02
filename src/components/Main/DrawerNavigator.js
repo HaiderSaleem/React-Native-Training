@@ -4,11 +4,14 @@ import BottomTabNavigation from './BottomTabNavigation';
 
 const Drawer = createDrawerNavigator();
 
-export default function DrawerNavigation() {
+const DrawerNavigator = () => (
   <Drawer.Navigator>
     <Drawer.Screen
-      name="MainScreen"
+      name="BottomTabNavigation"
       component={BottomTabNavigation}
     />
-  </Drawer.Navigator>;
-}
+  </Drawer.Navigator>
+
+);
+
+export default DrawerNavigator;
