@@ -7,6 +7,7 @@ import Store from './src/Redux/store';
 import LoginScreen from './src/components/Login/LoginScreen';
 import Map from './src/components/Map/Map';
 import BottomTabNavigation from './src/components/Main/BottomTabNavigation';
+import DrawerNavigator from './src/components/Main/DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,8 +23,8 @@ export default function App() {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="BottomTabNavigation"
-            component={BottomTabNavigation}
+            name="DrawerNavigator"
+            component={DrawerNavigator}
           />
           <Stack.Screen
             options={{ headerShown: false }}
