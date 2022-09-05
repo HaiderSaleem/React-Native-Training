@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 });
 
 const Details = ({ navigation }) => {
-  const { userName, password, data } = useSelector((state) => state.userReducer);
+  const { data } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const FocusedGradient = ['#000000', '#000000', '#696969', '#808080', '#d3d3d3', '#ffffff'];
   const [freshing, setRefreshing] = useState(false);
@@ -102,23 +102,14 @@ const Details = ({ navigation }) => {
     dispatch(getAPIData());
   }, []);
   useEffect(() => {
-    setQueryList(data);
-  }, []);
+    if (data) { setQueryList(data); }
+  }, [data]);
 
   if (!queryList) {
     return null;
   }
   return (
     <LinearGradient colors={FocusedGradient} style={styles.body}>
-      <Text style={styles.title}>
-        Welcome
-        {' '}
-        {userName}
-        {', '}
-        Password is
-        {' '}
-        {password}
-      </Text>
 
       <CustomSearchBar updatingText={updatingText} />
       <View>
@@ -150,8 +141,10 @@ const Details = ({ navigation }) => {
   );
 };
 
-Details.defaultProps = {
-
+Details.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default Details;

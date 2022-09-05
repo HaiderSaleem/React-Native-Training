@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
 
       const jsonData = JSON.stringify({ userName, password });
       await AsyncStorage.setItem('userData', jsonData);
-      navigation.navigate('MainScreen');
+      navigation.navigate('DrawerNavigator');
     }
   };
 

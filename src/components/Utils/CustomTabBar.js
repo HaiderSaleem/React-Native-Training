@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
@@ -5,7 +7,7 @@ import {
 } from 'react-native';
 import { FAB } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   tab1: {
@@ -129,15 +131,14 @@ function CustomTabBar({ state, descriptors, navigation }) {
   );
 }
 
-CustomTabBar.prototype = {
-  state: Proptypes.shape({
-    index: Proptypes.number.isRequired,
-    routes: Proptypes.number.isRequired,
+CustomTabBar.propTypes = {
+  state: PropTypes.shape({
+    index: PropTypes.number.isRequired,
   }).isRequired,
-  descriptors: Proptypes.shape({}).isRequired,
-  navigation: Proptypes.shape({
-    navigate: Proptypes.func.isRequired,
-    emit: Proptypes.func.isRequired,
+  descriptors: PropTypes.shape({}).isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    emit: PropTypes.func.isRequired,
   }).isRequired,
 };
 CustomTabBar.defaultProps = {
