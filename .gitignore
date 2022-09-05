@@ -58,3 +58,4 @@ buck-out/
 .env
 # CocoaPods
 /ios/Pods/
+android/java_pid11024.hprof

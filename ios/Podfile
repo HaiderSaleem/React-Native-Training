@@ -18,6 +18,9 @@ target 'FirstApp' do
 
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   target 'FirstAppTests' do
     inherit! :complete
     # Pods for testing

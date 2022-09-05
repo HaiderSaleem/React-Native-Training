@@ -5,8 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import Store from './src/Redux/store';
 import LoginScreen from './src/components/Login/LoginScreen';
-import MainScreen from './src/components/Main/MainScreen';
 import Map from './src/components/Map/Map';
+import BottomTabNavigation from './src/components/Main/BottomTabNavigation';
+import DrawerNavigator from './src/components/Main/DrawerNavigator';
+import Profile from './src/components/Profile/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,8 +24,13 @@ export default function App() {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="MainScreen"
-            component={MainScreen}
+            name="DrawerNavigator"
+            component={DrawerNavigator}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Profile"
+            component={Profile}
           />
           <Stack.Screen
             options={{ headerShown: false }}
