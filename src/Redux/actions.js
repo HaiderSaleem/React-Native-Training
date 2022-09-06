@@ -4,6 +4,7 @@ import { RAPID_API_KEY } from '@env';
 export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_USER_PASSWORD = 'SET_USER_PASSWORD';
 export const GET_DATA = 'GET_DATA';
+export const SET_PROFILE_IMAGE = 'SET_PROFILE_IMAGE';
 
 export const getAPIData = () => {
   const options = {
@@ -17,8 +18,8 @@ export const getAPIData = () => {
     // },
     headers: {
       'Content-Type': 'application/json',
-      'X-RapidAPI-Key': RAPID_API_KEY,
-    //   'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
+      // 'X-RapidAPI-Key': RAPID_API_KEY,
+      //  'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
     },
   };
 
@@ -44,6 +45,13 @@ export const setPassword = (password) => (dispatch) => {
   dispatch({
     type: SET_USER_PASSWORD,
     payload: password,
+  });
+};
+
+export const setProfileImage = (profileUri) => (dispatch) => {
+  dispatch({
+    type: SET_PROFILE_IMAGE,
+    payload: profileUri,
   });
 };
 

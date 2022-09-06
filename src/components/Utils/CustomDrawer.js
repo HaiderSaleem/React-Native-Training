@@ -50,11 +50,32 @@ const styles = StyleSheet.create({
   },
 });
 export default function CustomDrawer({ navigation }) {
-  const { userName } = useSelector((states) => states.userReducer);
+  const { userName, profileUri } = useSelector((states) => states.userReducer);
 
   const onPressHandler = () => {
     navigation.navigate('Profile');
   };
+
+  const getImage = () => {
+    if (profileUri) {
+      return (
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={{ uri: profileUri }}
+        />
+      );
+    }
+
+    return (
+      <Image
+        style={styles.image}
+        resizeMode="contain"
+        source={require('../../assets/images/person.png')}
+      />
+    );
+  };
+
   return (
     <ImageBackground
       style={styles.mainContainer}
@@ -63,11 +84,7 @@ export default function CustomDrawer({ navigation }) {
 
       <View style={styles.profileContainer}>
         <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            source={require('../../assets/images/person.png')}
-          />
+          {getImage()}
         </View>
         <Pressable
           style={styles.textContainer}
