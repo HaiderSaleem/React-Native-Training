@@ -96,9 +96,9 @@ const LoginScreen = ({ navigation }) => {
           const data = JSON.parse(value);
           dispatch(setName(data.userName));
           dispatch(setPassword(data.password));
+          // SplashScreen.hide();
           navigation.navigate('DrawerNavigator');
-          SplashScreen.hide();
-        } else { SplashScreen.hide(); }
+        } // else { SplashScreen.hide(); }
       });
     } catch (error) {
       console.warn(error);
