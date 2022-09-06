@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import TextInput from 'react-native-material-textinput';
+import SplashScreen from 'react-native-splash-screen';
 import { setName, setPassword } from '../../Redux/actions';
 
 const styles = StyleSheet.create({
@@ -67,7 +68,6 @@ const styles = StyleSheet.create({
 const LoginScreen = ({ navigation }) => {
   const { userName, password } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
-  // const [name, setName] = useState('');
 
   const onPressHandler = async () => {
     if (userName.length === 0 && password.length === 0) {
@@ -96,8 +96,9 @@ const LoginScreen = ({ navigation }) => {
           const data = JSON.parse(value);
           dispatch(setName(data.userName));
           dispatch(setPassword(data.password));
+          // SplashScreen.hide();
           navigation.navigate('DrawerNavigator');
-        }
+        } // else { SplashScreen.hide(); }
       });
     } catch (error) {
       console.warn(error);
@@ -105,8 +106,8 @@ const LoginScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getData();
     createChannel();
+    getData();
   }, []);
   return (
     <ImageBackground style={{ width: '100%', height: '100%', flex: 1 }} source={require('../../assets/images/bg.png')}>
@@ -126,9 +127,9 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-LoginScreen.prototypes = {
+LoginScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
-  }),
+  }).isRequired,
 };
 export default LoginScreen;
