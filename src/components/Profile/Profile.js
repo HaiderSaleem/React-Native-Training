@@ -1,31 +1,44 @@
+/* eslint-disable no-console */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, StyleSheet, Image, Pressable, Text, TextInput,
+  View, StyleSheet, Image, Pressable, Text, Alert, Modal,
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useDispatch } from 'react-redux';
-import { setProfileImage } from '../../Redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import TextInput from 'react-native-material-textinput';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { setName, setPassword, setProfileImage } from '../../Redux/actions';
 
 const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    aspectRatio: 1 / 1,
-  },
-  imageContainer: {
-    flex: 0.3,
-    aspectRatio: 1 / 1,
-    borderRadius: 1000,
-    borderWidth: 1,
-    overflow: 'hidden',
-    marginTop: 20,
-  },
-  mainContainer: {
-    height: '100%',
-  },
   profileContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+  image: {
+    flex: 1,
+  },
+  coverContainer: {
+    flex: 0.4,
+    width: '100%',
+    marginTop: 5,
+  },
+  coverImage: {
+    flex: 1,
+    opacity: 0.8,
+  },
+  imageContainer: {
+    flex: 0.2,
+    aspectRatio: 1 / 1,
+    borderRadius: 1000,
+    borderWidth: 2,
+    borderColor: 'white',
+    overflow: 'hidden',
+    zIndex: 10,
+    bottom: 70,
+  },
+  mainContainer: {
+    height: '100%',
   },
   button: {
     flex: 0.05,
@@ -42,14 +55,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    flex: 1,
-    height: 20,
-    borderRadius: 10,
-    borderColor: 'black',
+    width: '80%',
+  },
+  userName: {
+    color: 'black',
+    fontSize: 20,
+    bottom: 40,
+    fontFamily: 'Poppins-Regular',
   },
 });
 const Profile = () => {
-  const [image, setImage] = useState('');
+  const { userName, password, profileUri } = useSelector((states) => states.userReducer);
+  const [name, setUserName] = useState('');
+  const [psw, setPsw] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+
   const dispatch = useDispatch();
 
   const pressHandler = async () => {
@@ -71,49 +91,147 @@ const Profile = () => {
         console.log('ImagePicker Error: ', res.error);
       } else if (res.customButton) {
         console.log('User tapped custom button: ', res.customButton);
-        alert(res.customButton);
+        Alert.alert('Warning', res.customButton);
       } else {
         dispatch(setProfileImage(res.assets[0].uri));
-        setImage(res.assets[0].uri);
         await AsyncStorage.setItem('profileImage', res.assets[0].uri);
+        Alert.alert('Congrats!', 'Profile updated successfully');
       }
     });
   };
 
-  const getImage = () => {
-    console.log('abc', image);
+  const selectProfilePicture = () => {
+    setModalVisible(true);
+  };
 
-    if (image) {
-      console.log('123');
+  const getImage = () => {
+    if (profileUri) {
       return (
+        <Pressable
+          onPress={selectProfilePicture}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={{ uri: profileUri }}
+          />
+        </Pressable>
+      );
+    }
+    return (
+      <Pressable
+        onPress={selectProfilePicture}
+        style={styles.image}
+      >
         <Image
           style={styles.image}
           resizeMode="contain"
-          source={{ uri: image }}
+          source={require('../../assets/images/person.png')}
+        />
+      </Pressable>
+    );
+  };
+
+  const showProfilePicture = () => {
+    if (profileUri) {
+      return (
+        <Image
+          style={[styles.image, { backgroundColor: 'white' }]}
+          resizeMode="center"
+          source={{ uri: profileUri }}
+        />
+      );
+    }
+    return <View />;
+  };
+
+  const getCoverImage = () => {
+    if (profileUri) {
+      return (
+        <Image
+          style={styles.coverImage}
+          resizeMode="stretch"
+          source={{ uri: profileUri }}
         />
       );
     }
 
     return (
       <Image
-        style={styles.image}
-        resizeMode="contain"
+        style={styles.coverImage}
+        resizeMode="stretch"
         source={require('../../assets/images/person.png')}
       />
     );
   };
+  useEffect(() => {
+    setUserName(userName);
+    setPsw(password);
+  }, [userName, password]);
+
+  const updateProfile = async () => {
+    if (name.length === 0 && psw.length === 0) {
+      Alert.alert('Warning!', 'Please enter a valid name');
+    } else {
+      dispatch(setName(name));
+      dispatch(setPassword(psw));
+      const jsonData = JSON.stringify({ userName: name, password: psw });
+      await AsyncStorage.setItem('userData', jsonData);
+      Alert.alert('Congrats!', 'Profile updated successfully');
+    }
+  };
+
   return (
     <View style={styles.profileContainer}>
+      <View style={styles.coverContainer}>
+        {getCoverImage()}
+        <Pressable onPress={pressHandler} style={{ right: 10, bottom: 30, alignSelf: 'flex-end' }}>
+          <Icon name="camera" size={20} color="white" />
+        </Pressable>
+      </View>
       <View style={styles.imageContainer}>
         {getImage()}
       </View>
-      <Pressable onPress={pressHandler} style={styles.button}>
+      <Text style={styles.userName}>{name}</Text>
+      <View style={styles.name}>
+        <TextInput
+          value={name}
+          label="Name"
+          labelColor="#000"
+          color="#000"
+          underlineColor="#000"
+          activeColor="#000"
+          onChangeText={(value) => setUserName(value)}
+        />
+        <TextInput
+          value={psw}
+          secureTextEntry
+          label="Password"
+          labelColor="#000"
+          color="#000"
+          underlineColor="#000"
+          activeColor="#000"
+          onChangeText={(value) => setPsw(value)}
+        />
+      </View>
+      <Pressable onPress={updateProfile} style={styles.button}>
         <Text style={styles.text}>
           Update Profile
         </Text>
       </Pressable>
-
-      <TextInput style={styles.name} />
+      <Modal
+        animationType="slide"
+        transparent
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <Icon name="times-circle" size={20} style={{ alignSelf: 'flex-end', marginTop: 20 }} />
+        {showProfilePicture()}
+      </Modal>
     </View>
   );
 };

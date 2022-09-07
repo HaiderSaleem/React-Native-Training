@@ -61,7 +61,7 @@ export default function CustomDrawer({ navigation }) {
       return (
         <Image
           style={styles.image}
-          resizeMode="contain"
+          resizeMode="cover"
           source={{ uri: profileUri }}
         />
       );

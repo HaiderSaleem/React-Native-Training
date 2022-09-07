@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import TextInput from 'react-native-material-textinput';
-import SplashScreen from 'react-native-splash-screen';
 import { setName, setPassword, setProfileImage } from '../../Redux/actions';
 
 const styles = StyleSheet.create({
@@ -89,6 +88,16 @@ const LoginScreen = ({ navigation }) => {
     });
   };
 
+  const getUserProfilePicture = () => {
+    try {
+      AsyncStorage.getItem('profileImage').then((value) => {
+        dispatch(setProfileImage(value));
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   const getData = () => {
     try {
       AsyncStorage.getItem('userData').then((value) => {
@@ -100,16 +109,6 @@ const LoginScreen = ({ navigation }) => {
           // SplashScreen.hide();
           navigation.navigate('DrawerNavigator');
         } // else { SplashScreen.hide(); }
-      });
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const getUserProfilePicture = () => {
-    try {
-      AsyncStorage.getItem('profileImage').then((value) => {
-        dispatch(setProfileImage(value));
       });
     } catch (error) {
       console.warn(error);
@@ -140,7 +139,7 @@ const LoginScreen = ({ navigation }) => {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
+    navigate: PropTypes.shape({}).isRequired,
   }).isRequired,
 };
 export default LoginScreen;
