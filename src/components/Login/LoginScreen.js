@@ -139,7 +139,7 @@ const LoginScreen = ({ navigation }) => {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.shape({
-    navigate: PropTypes.shape({}).isRequired,
+    navigate: PropTypes.func.isRequired,
   }).isRequired,
 };
 export default LoginScreen;

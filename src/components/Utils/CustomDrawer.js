@@ -85,7 +85,7 @@ export default function CustomDrawer({ navigation }) {
 
       <ImageBackground
         style={styles.profileContainer}
-        source={coverUri ? { uri: coverUri } : ''}
+        source={coverUri ? { uri: coverUri } : require('../../assets/images/bg.png')}
       >
         <View style={styles.imageContainer}>
           {getImage()}
