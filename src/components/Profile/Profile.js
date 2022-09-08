@@ -8,7 +8,9 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import TextInput from 'react-native-material-textinput';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { setName, setPassword, setProfileImage } from '../../Redux/actions';
+import {
+  setCoverImage, setName, setPassword, setProfileImage,
+} from '../../Redux/actions';
 
 const styles = StyleSheet.create({
   profileContainer: {
@@ -65,14 +67,16 @@ const styles = StyleSheet.create({
   },
 });
 const Profile = () => {
-  const { userName, password, profileUri } = useSelector((states) => states.userReducer);
+  const {
+    userName, password, profileUri, coverUri,
+  } = useSelector((states) => states.userReducer);
   const [name, setUserName] = useState('');
   const [psw, setPsw] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const dispatch = useDispatch();
 
-  const pressHandler = async () => {
+  const pressHandler = async (isProfilePicture) => {
     const options = {
       title: 'Select Image',
       customButtons: [
@@ -93,8 +97,12 @@ const Profile = () => {
         console.log('User tapped custom button: ', res.customButton);
         Alert.alert('Warning', res.customButton);
       } else {
-        dispatch(setProfileImage(res.assets[0].uri));
-        await AsyncStorage.setItem('profileImage', res.assets[0].uri);
+        if (isProfilePicture) {
+          dispatch(setProfileImage(res.assets[0].uri));
+        } else {
+          dispatch(setCoverImage(res.assets[0].uri));
+        }
+        await AsyncStorage.setItem(isProfilePicture ? 'profileImage' : 'coverImage', res.assets[0].uri);
         Alert.alert('Congrats!', 'Profile updated successfully');
       }
     });
@@ -109,6 +117,7 @@ const Profile = () => {
       return (
         <Pressable
           onPress={selectProfilePicture}
+          onLongPress={() => pressHandler(true)}
           resizeMode="cover"
           style={styles.image}
         >
@@ -123,6 +132,7 @@ const Profile = () => {
     return (
       <Pressable
         onPress={selectProfilePicture}
+        onLongPress={() => pressHandler(true)}
         style={styles.image}
       >
         <Image
@@ -148,12 +158,12 @@ const Profile = () => {
   };
 
   const getCoverImage = () => {
-    if (profileUri) {
+    if (coverUri) {
       return (
         <Image
           style={styles.coverImage}
           resizeMode="stretch"
-          source={{ uri: profileUri }}
+          source={{ uri: coverUri }}
         />
       );
     }
@@ -187,7 +197,7 @@ const Profile = () => {
     <View style={styles.profileContainer}>
       <View style={styles.coverContainer}>
         {getCoverImage()}
-        <Pressable onPress={pressHandler} style={{ right: 10, bottom: 30, alignSelf: 'flex-end' }}>
+        <Pressable onPress={() => { pressHandler(false); }} style={{ right: 10, bottom: 30, alignSelf: 'flex-end' }}>
           <Icon name="camera" size={20} color="white" />
         </Pressable>
       </View>
@@ -222,14 +232,19 @@ const Profile = () => {
         </Text>
       </Pressable>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
-        <Icon name="times-circle" size={20} style={{ alignSelf: 'flex-end', marginTop: 20 }} />
+        <Icon
+          onPress={() => { setModalVisible(!modalVisible); }}
+          name="times-circle"
+          size={20}
+          style={{ alignSelf: 'flex-end', padding: 20 }}
+        />
         {showProfilePicture()}
       </Modal>
     </View>

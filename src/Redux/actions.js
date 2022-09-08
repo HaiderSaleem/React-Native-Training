@@ -5,6 +5,7 @@ export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_USER_PASSWORD = 'SET_USER_PASSWORD';
 export const GET_DATA = 'GET_DATA';
 export const SET_PROFILE_IMAGE = 'SET_PROFILE_IMAGE';
+export const SET_COVER_IMAGE = 'SET_COVER_IMAGE';
 
 export const getAPIData = () => {
   const options = {
@@ -52,6 +53,13 @@ export const setProfileImage = (profileUri) => (dispatch) => {
   dispatch({
     type: SET_PROFILE_IMAGE,
     payload: profileUri,
+  });
+};
+
+export const setCoverImage = (coverUri) => (dispatch) => {
+  dispatch({
+    type: SET_COVER_IMAGE,
+    payload: coverUri,
   });
 };
 

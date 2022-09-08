@@ -10,10 +10,11 @@ import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     height: '100%',
   },
   profileContainer: {
-    height: '25%',
+    flex: 0.3,
     borderColor: 'white',
     borderRadius: 1,
     borderBottomWidth: 1,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function CustomDrawer({ navigation }) {
-  const { userName, profileUri } = useSelector((states) => states.userReducer);
+  const { userName, profileUri, coverUri } = useSelector((states) => states.userReducer);
 
   const onPressHandler = () => {
     navigation.navigate('Profile');
@@ -82,7 +83,10 @@ export default function CustomDrawer({ navigation }) {
       source={require('../../assets/images/bg.png')}
     >
 
-      <View style={styles.profileContainer}>
+      <ImageBackground
+        style={styles.profileContainer}
+        source={coverUri ? { uri: coverUri } : ''}
+      >
         <View style={styles.imageContainer}>
           {getImage()}
         </View>
@@ -98,7 +102,7 @@ export default function CustomDrawer({ navigation }) {
           name="caret-down"
           color="white"
         />
-      </View>
+      </ImageBackground>
       <View>
         <DrawerItem
           style={{
