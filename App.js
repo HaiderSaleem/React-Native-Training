@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import Store from './src/Redux/store';
 import LoginScreen from './src/components/Login/LoginScreen';
 import Map from './src/components/Map/Map';
-import BottomTabNavigation from './src/components/Main/BottomTabNavigation';
 import DrawerNavigator from './src/components/Main/DrawerNavigator';
 import Profile from './src/components/Profile/Profile';
 
@@ -28,12 +27,10 @@ export default function App() {
             component={DrawerNavigator}
           />
           <Stack.Screen
-            options={{ headerShown: false }}
             name="Profile"
             component={Profile}
           />
           <Stack.Screen
-            options={{ headerShown: false }}
             name="Map"
             component={Map}
           />

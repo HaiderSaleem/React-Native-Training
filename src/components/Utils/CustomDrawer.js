@@ -10,10 +10,11 @@ import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     height: '100%',
   },
   profileContainer: {
-    height: '25%',
+    flex: 0.3,
     borderColor: 'white',
     borderRadius: 1,
     borderBottomWidth: 1,
@@ -50,24 +51,44 @@ const styles = StyleSheet.create({
   },
 });
 export default function CustomDrawer({ navigation }) {
-  const { userName } = useSelector((states) => states.userReducer);
+  const { userName, profileUri, coverUri } = useSelector((states) => states.userReducer);
 
   const onPressHandler = () => {
     navigation.navigate('Profile');
   };
+
+  const getImage = () => {
+    if (profileUri) {
+      return (
+        <Image
+          style={styles.image}
+          resizeMode="cover"
+          source={{ uri: profileUri }}
+        />
+      );
+    }
+
+    return (
+      <Image
+        style={styles.image}
+        resizeMode="contain"
+        source={require('../../assets/images/person.png')}
+      />
+    );
+  };
+
   return (
     <ImageBackground
       style={styles.mainContainer}
       source={require('../../assets/images/bg.png')}
     >
 
-      <View style={styles.profileContainer}>
+      <ImageBackground
+        style={styles.profileContainer}
+        source={coverUri ? { uri: coverUri } : require('../../assets/images/bg.png')}
+      >
         <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            source={require('../../assets/images/person.png')}
-          />
+          {getImage()}
         </View>
         <Pressable
           style={styles.textContainer}
@@ -81,7 +102,7 @@ export default function CustomDrawer({ navigation }) {
           name="caret-down"
           color="white"
         />
-      </View>
+      </ImageBackground>
       <View>
         <DrawerItem
           style={{
