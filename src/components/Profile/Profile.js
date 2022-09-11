@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
-  View, StyleSheet, Image, Pressable, Text, Alert, Modal,
+  View, StyleSheet, Image, Pressable, Text, Alert, Modal, PermissionsAndroid,
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -77,36 +77,70 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const pressHandler = async (isProfilePicture) => {
-    const options = {
-      title: 'Select Image',
-      customButtons: [
-        { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    launchImageLibrary(options, async (res) => {
-      console.log('Response = ', res);
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else if (res.customButton) {
-        console.log('User tapped custom button: ', res.customButton);
-        Alert.alert('Warning', res.customButton);
-      } else {
-        if (isProfilePicture) {
-          dispatch(setProfileImage(res.assets[0].uri));
+    const granted = await PermissionsAndroid
+      .check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+    if (granted) {
+      console.log('You can use the WRITE_EXTERNAL_STORAGE');
+
+      const options = {
+        title: 'Select Image',
+        customButtons: [
+          { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+        ],
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      launchImageLibrary(options, async (res) => {
+        console.log('Response = ', res);
+        if (res.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (res.error) {
+          console.log('ImagePicker Error: ', res.error);
+        } else if (res.customButton) {
+          console.log('User tapped custom button: ', res.customButton);
+          Alert.alert('Warning', res.customButton);
         } else {
-          dispatch(setCoverImage(res.assets[0].uri));
+          if (isProfilePicture) {
+            dispatch(setProfileImage(res.assets[0].uri));
+          } else {
+            dispatch(setCoverImage(res.assets[0].uri));
+          }
+          await AsyncStorage.setItem(isProfilePicture ? 'profileImage' : 'coverImage', res.assets[0].uri);
+          Alert.alert('Congrats!', 'Profile updated successfully');
         }
-        await AsyncStorage.setItem(isProfilePicture ? 'profileImage' : 'coverImage', res.assets[0].uri);
-        Alert.alert('Congrats!', 'Profile updated successfully');
-      }
-    });
+      });
+    } else {
+      console.log('WRITE_EXTERNAL_STORAGE permission denied');
+      requestLocationPermission();
+    }
   };
+
+  async function requestLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission',
+          message:
+            'App needs access to your storage ',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        Alert.alert('Success!', 'Permission granted successfully');
+      } else {
+        console.log('Storage permission denied');
+        Alert.alert('Failure!', 'Storage permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 
   const selectProfilePicture = () => {
     setModalVisible(true);
