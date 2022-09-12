@@ -8,7 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import TextInput from 'react-native-material-textinput';
-import { setName, setPassword, setProfileImage } from '../../Redux/actions';
+import {
+  setCoverImage, setName, setPassword, setProfileImage,
+} from '../../Redux/actions';
 
 const styles = StyleSheet.create({
   loginButton: {
@@ -98,6 +100,16 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+  const getUserCoverPicture = () => {
+    try {
+      AsyncStorage.getItem('coverImage').then((value) => {
+        dispatch(setCoverImage(value));
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   const getData = () => {
     try {
       AsyncStorage.getItem('userData').then((value) => {
@@ -106,6 +118,7 @@ const LoginScreen = ({ navigation }) => {
           dispatch(setName(data.userName));
           dispatch(setPassword(data.password));
           getUserProfilePicture();
+          getUserCoverPicture();
           // SplashScreen.hide();
           navigation.navigate('DrawerNavigator');
         } // else { SplashScreen.hide(); }
