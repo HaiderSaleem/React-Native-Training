@@ -8,6 +8,7 @@ import LoginScreen from './src/components/Login/LoginScreen';
 import Map from './src/components/Map/Map';
 import DrawerNavigator from './src/components/Main/DrawerNavigator';
 import Profile from './src/components/Profile/Profile';
+import OnBoarding from './src/components/OnBoarding/OnBoarding';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,11 @@ export default function App() {
     <Provider store={Store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="OnBoarding"
+            component={OnBoarding}
+          />
           <Stack.Screen
             options={{ headerShown: false }}
             name="LoginScreen"
