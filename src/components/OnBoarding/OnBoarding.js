@@ -1,88 +1,70 @@
-import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import {
+  View, TouchableOpacity, Text, Image, StyleSheet,
+} from 'react-native';
 import PropTypes from 'prop-types';
-import Onboarding from 'react-native-onboarding-swiper';
-import { Button } from 'react-native-elements';
+import PagerView from 'react-native-pager-view';
+import Dots from '../Utils/Dots';
 
+const styles = StyleSheet.create({
+  image: {
+    width: 300,
+    height: 300,
+    alignSelf: 'center',
+  },
+});
 const OnBoarding = ({ navigation }) => {
-  const Dots = ({ selected }) => {
-    let backgroundColor;
-    backgroundColor = selected ? 'yellow' : 'black';
-    return (
-      <View
-        style={{
-          width: 24,
-          height: 6,
-          marginHorizontal: 3,
-          backgroundColor,
-          marginBottom: 150,
-          alignItems: 'center',
-        }}
-      />
-    );
-  };
-  const Next = ({ ...props }) => (
-    <TouchableOpacity
-      style={{
-        flex: 1, width: '100%', backgroundColor: 'red', justifyContent: 'center', alignItems: 'center',
-      }}
-      {...props}
-    >
-      <Text style={{
-        width: '100%',
-        fontSize: 16,
-        backgroundColor: 'yellow',
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginEnd: 200,
-      }}
-      >
-        Done
-      </Text>
-    </TouchableOpacity>
+  const [index, setIndex] = useState(0);
+
+  const onPageSelected = useCallback(
+    (e) => {
+      const pageIdx = e.nativeEvent.position;
+      setIndex(pageIdx);
+    },
+    [],
   );
   return (
     <View style={{ flex: 1, alignContent: 'center' }}>
-      {/* <PagerView
+      <PagerView
         showPageIndicator
         style={{ flex: 0.9 }}
-        onPageSelected={(e) => {
-          console.log(e.offset, e.position);
-        }}
+        onPageSelected={onPageSelected}
       >
-        <View key="1" style={{ backgroundColor: 'blue', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>First page</Text>
+        <View key="1" style={{ alignItems: 'center' }}>
+          <Text style={{ color: 'black' }}>First page</Text>
+          <Image style={styles.image} source={require('../../assets/images/person.png')} />
         </View>
-        <View key="2" style={{ backgroundColor: 'yellow', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Second page</Text>
+        <View key="2" style={{ alignItems: 'center' }}>
+          <Text style={{ color: 'black' }}>Second page</Text>
+          <Image style={styles.image} source={require('../../assets/images/person.png')} />
         </View>
-        <View key="3" style={{ backgroundColor: 'red', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Second page</Text>
+        <View key="3" style={{ alignItems: 'center' }}>
+          <Text style={{ color: 'black' }}>Third page</Text>
+          <Image style={styles.image} source={require('../../assets/images/person.png')} />
         </View>
       </PagerView>
-      <Button title="Next" onPress={() => { navigation.navigate('LoginScreen'); }} /> */}
-      <Onboarding
-        bottomBarColor="white"
-        showSkip={false}
-        DotComponent={Dots}
-        NextButtonComponent={Next}
-        bottomBarHeight={60}
-        pages={[
-          {
-            backgroundColor: 'white',
-            title: 'Welcome',
-          },
-          {
-            backgroundColor: 'white',
-            title: 'Welcome',
-          },
-          {
-            backgroundColor: 'white',
-            title: 'Welcome',
-          },
-        ]}
-      />
+      <View />
+      <View style={{
+        flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center', marginVertical: 10.0, marginBottom: 50,
+      }}
+      >
+        <Dots keyIndex={0} currentIndex={index} />
+        <Dots keyIndex={1} currentIndex={index} />
+        <Dots keyIndex={2} currentIndex={index} />
+      </View>
+      <TouchableOpacity
+        style={{
+          height: 50, backgroundColor: 'blue', marginStart: 20, marginEnd: 20, justifyContent: 'center', borderRadius: 10,
+        }}
+        onPress={() => { navigation.navigate('LoginScreen'); }}
+      >
+        <Text style={{
+          textAlign: 'center', color: 'white', fontSize: 16,
+        }}
+        >
+          Continue
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
