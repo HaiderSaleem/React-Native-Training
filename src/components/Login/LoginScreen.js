@@ -66,9 +66,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = async ({ navigation }) => {
   const { userName, password } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
+  const UserSchema = {
+    name: 'User',
+    properties: {
+      _id: 'int',
+      userName: 'string',
+      password: 'string?',
+    },
+    primaryKey: '_id',
+  };
+  const realm = await Realm.open({
+    path: 'myrealm',
+    schema: [TaskSchema],
+  });
 
   const onPressHandler = async () => {
     if (userName.length === 0 && password.length === 0) {
@@ -79,6 +93,14 @@ const LoginScreen = ({ navigation }) => {
 
       const jsonData = JSON.stringify({ userName, password });
       await AsyncStorage.setItem('userData', jsonData);
+      realm.write(() => {
+        const user = realm.create('User', {
+          _id: 1,
+          userName,
+          password,
+        });
+        console.log('User', user.name);
+      });
       navigation.navigate('DrawerNavigator');
     }
   };
