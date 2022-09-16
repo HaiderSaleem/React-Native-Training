@@ -8,12 +8,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import TextInput from 'react-native-material-textinput';
-import Realm from 'realm';
 import uuid from 'react-native-uuid';
 import {
   setCoverImage, setName, setPassword, setProfileImage,
 } from '../../Redux/actions';
-import UserSchema from '../../Realm/UserSchema';
+import realm from '../../Realm/Realm';
 
 const styles = StyleSheet.create({
   loginButton: {
@@ -72,28 +71,13 @@ const LoginScreen = ({ navigation }) => {
   const { userName, password } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
-  const setUser = (async () => {
-    await Realm.open({
-      path: 'myrealm',
-      schema: [UserSchema],
-    }).then((realm) => {
-      realm.write(() => {
-        realm.create('User', {
-          id: uuid.v4(),
-          userName,
-          password,
-        });
+  const setUser = () => {
+    realm.write(() => {
+      realm.create('User', {
+        id: uuid.v4(),
+        userName,
+        password,
       });
-    });
-  });
-
-  const getUser = async () => {
-    await Realm.open({
-      path: 'myrealm',
-      schema: [UserSchema],
-    }).then((realm) => {
-      const tasks = realm.objects('User');
-      console.log(`The lists of tasks are: ${tasks.map((task) => task.userName)}`);
     });
   };
 
@@ -139,26 +123,27 @@ const LoginScreen = ({ navigation }) => {
 
   const getData = async () => {
     try {
-      AsyncStorage.getItem('userData').then((value) => {
-        if (value != null) {
-          const data = JSON.parse(value);
-          dispatch(setName(data.userName));
-          dispatch(setPassword(data.password));
-          getUserProfilePicture();
-          getUserCoverPicture();
-          getUser();
-          // SplashScreen.hide();
-          navigation.navigate('DrawerNavigator');
-        } // else { SplashScreen.hide(); }
-      });
+      getUserProfilePicture();
+      getUserCoverPicture();
+      // SplashScreen.hide();
+      navigation.navigate('DrawerNavigator');
     } catch (error) {
       console.warn(error);
     }
   };
 
+  const getUser = async () => {
+    const task = realm.objects('User')[0];
+    if (task) {
+      dispatch(setName(task.userName));
+      dispatch(setPassword(task.password));
+      getData();
+    }
+  };
+
   useEffect(() => {
     createChannel();
-    getData();
+    getUser();
   }, []);
   return (
     <ImageBackground style={{ width: '100%', height: '100%', flex: 1 }} source={require('../../assets/images/bg.png')}>
