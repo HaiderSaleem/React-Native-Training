@@ -8,9 +8,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import TextInput from 'react-native-material-textinput';
+import Realm from 'realm';
+import uuid from 'react-native-uuid';
 import {
   setCoverImage, setName, setPassword, setProfileImage,
 } from '../../Redux/actions';
+import UserSchema from '../../Realm/UserSchema';
 
 const styles = StyleSheet.create({
   loginButton: {
@@ -65,24 +68,34 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
 });
-
-const LoginScreen = async ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
   const { userName, password } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
-  const UserSchema = {
-    name: 'User',
-    properties: {
-      _id: 'int',
-      userName: 'string',
-      password: 'string?',
-    },
-    primaryKey: '_id',
-  };
-  const realm = await Realm.open({
-    path: 'myrealm',
-    schema: [TaskSchema],
+  const setUser = (async () => {
+    await Realm.open({
+      path: 'myrealm',
+      schema: [UserSchema],
+    }).then((realm) => {
+      realm.write(() => {
+        realm.create('User', {
+          id: uuid.v4(),
+          userName,
+          password,
+        });
+      });
+    });
   });
+
+  const getUser = async () => {
+    await Realm.open({
+      path: 'myrealm',
+      schema: [UserSchema],
+    }).then((realm) => {
+      const tasks = realm.objects('User');
+      console.log(`The lists of tasks are: ${tasks.map((task) => task.userName)}`);
+    });
+  };
 
   const onPressHandler = async () => {
     if (userName.length === 0 && password.length === 0) {
@@ -90,17 +103,9 @@ const LoginScreen = async ({ navigation }) => {
     } else {
       dispatch(setName(userName));
       dispatch(setPassword(password));
-
+      setUser();
       const jsonData = JSON.stringify({ userName, password });
       await AsyncStorage.setItem('userData', jsonData);
-      realm.write(() => {
-        const user = realm.create('User', {
-          _id: 1,
-          userName,
-          password,
-        });
-        console.log('User', user.name);
-      });
       navigation.navigate('DrawerNavigator');
     }
   };
@@ -132,7 +137,7 @@ const LoginScreen = async ({ navigation }) => {
     }
   };
 
-  const getData = () => {
+  const getData = async () => {
     try {
       AsyncStorage.getItem('userData').then((value) => {
         if (value != null) {
@@ -141,6 +146,7 @@ const LoginScreen = async ({ navigation }) => {
           dispatch(setPassword(data.password));
           getUserProfilePicture();
           getUserCoverPicture();
+          getUser();
           // SplashScreen.hide();
           navigation.navigate('DrawerNavigator');
         } // else { SplashScreen.hide(); }
@@ -174,7 +180,7 @@ const LoginScreen = async ({ navigation }) => {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
+    navigate: PropTypes.instanceOf(Object).isRequired,
   }).isRequired,
 };
 export default LoginScreen;
