@@ -3,12 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Provider } from 'react-redux';
+import { LogBox } from 'react-native';
 import Store from './src/Redux/store';
 import LoginScreen from './src/components/Login/LoginScreen';
 import Map from './src/components/Map/Map';
 import DrawerNavigator from './src/components/Main/DrawerNavigator';
 import Profile from './src/components/Profile/Profile';
 import OnBoarding from './src/components/OnBoarding/OnBoarding';
+
+LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 const Stack = createNativeStackNavigator();
 

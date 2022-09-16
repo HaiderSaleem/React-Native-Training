@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import {
   View,
   FlatList,
@@ -12,15 +12,10 @@ import Header from './Header';
 import TodoList from '../TodoList/TodoList';
 import { getStyle } from './style';
 import AddToDo from '../AddToDo/AddToDo';
+import realm from '../../Realm/Realm';
 
 const Home = () => {
-  const [people, setPeople] = useState([
-    { name: 'Hey', id: 0 },
-    { name: 'Hi', id: 1 },
-    { name: 'Hello', id: 2 },
-    { name: 'Hola', id: 3 },
-
-  ]);
+  const [people, setPeople] = useState([]);
 
   const onItemPresses = (id) => {
     setPeople((prevPeople) => prevPeople.filter((person) => person.id !== id));
@@ -33,12 +28,28 @@ const Home = () => {
         id: uuid.v4(),
       },
       ...prevPeople]);
+      realm.write(() => {
+        realm.create('Tasks', {
+          id: uuid.v4(),
+          task: _name,
+        });
+      });
     } else {
       Alert.alert('OOPS!', 'Todos length should be greater than 3.', [
         { text: 'Understood', onPress: () => console.log('alert closed') },
       ]);
     }
   };
+
+  useLayoutEffect(() => {
+    const tasks = realm.objects('Tasks');
+    tasks.map((task) => (setPeople((prevPeople) => [{
+      name: task.task,
+      id: task.id,
+    },
+    ...prevPeople])
+    ));
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
