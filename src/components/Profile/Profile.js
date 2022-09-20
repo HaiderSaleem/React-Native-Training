@@ -10,7 +10,7 @@ import TextInput from 'react-native-material-textinput';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   setCoverImage, setName, setPassword, setProfileImage,
-} from '../../Redux/actions';
+} from '../../Redux/slice';
 
 const styles = StyleSheet.create({
   profileContainer: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 const Profile = () => {
   const {
     userName, password, profileUri, coverUri,
-  } = useSelector((states) => states.userReducer);
+  } = useSelector((states) => states.user);
   const [name, setUserName] = useState('');
   const [psw, setPsw] = useState('');
   const [modalVisible, setModalVisible] = useState(false);

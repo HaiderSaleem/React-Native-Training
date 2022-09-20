@@ -11,7 +11,7 @@ import TextInput from 'react-native-material-textinput';
 import uuid from 'react-native-uuid';
 import {
   setCoverImage, setName, setPassword, setProfileImage,
-} from '../../Redux/actions';
+} from '../../Redux/slice';
 import realm from '../../Realm/Realm';
 
 const styles = StyleSheet.create({
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
 });
 const LoginScreen = ({ navigation }) => {
-  const { userName, password } = useSelector((state) => state.userReducer);
+  const { userName, password } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const setUser = () => {
