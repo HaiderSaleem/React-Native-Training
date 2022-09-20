@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
-import { setName, setPassword, getAPIData } from '../../Redux/actions';
+import { setName, setPassword, getAPIData } from '../../Redux/slice';
 import CustomSearchBar from '../Utils/CustomSearchBar';
 
 const styles = StyleSheet.create({
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 });
 
 const Details = ({ navigation }) => {
-  const { data } = useSelector((state) => state.userReducer);
+  const { data } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const FocusedGradient = ['#000000', '#000000', '#696969', '#808080', '#d3d3d3', '#ffffff'];
   const [freshing, setRefreshing] = useState(false);

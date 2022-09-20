@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function CustomDrawer({ navigation }) {
-  const { userName, profileUri, coverUri } = useSelector((states) => states.userReducer);
+  const { userName, profileUri, coverUri } = useSelector((states) => states.user);
 
   const onPressHandler = () => {
     navigation.navigate('Profile');
